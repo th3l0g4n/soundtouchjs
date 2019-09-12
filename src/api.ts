@@ -1,7 +1,7 @@
-const http = require('http');
-const convert = require('xml-js');
+import http from 'http';
+import convert from 'xml-js';
 
-function request(method, host, path, data) {
+function request(method: string, host: string, path: string, data?: string): Promise<any> {
     return new Promise((resolve, reject) => {
         const req = http.request({
             method,
@@ -25,57 +25,42 @@ function request(method, host, path, data) {
     });
 }
 
-function info(ip) {
+export function info(ip: string) {
     return request('GET', ip, '/info');
 }
 
-function nowPlaying(ip) {
+export function nowPlaying(ip: string) {
     return request('GET', ip, '/now_playing');
 }
 
-function volume(ip) {
+export function volume(ip: string) {
     return request('GET', ip, '/volume');
 }
 
-function presets(ip) {
+export function presets(ip: string) {
     return request('GET', ip, '/presets');
 }
 
-function getGroup(ip) {
+export function getGroup(ip: string) {
     return request('GET', ip, '/getGroup');
 }
 
-function getZone(ip) {
+export function getZone(ip: string) {
     return request('GET', ip, '/getZone');
 }
 
-function key(ip, state, value) {
+export function key(ip: string, state: string, value: string) {
     return request('POST', ip, '/key', `<key state="${state}" sender="Gabbo">${value}</key>`);
 }
 
-function setZone(ip, payload) {
+export function setZone(ip: string, payload: string) {
     return request('POST', ip, '/setZone', payload);
 }
 
-function addZoneSlave(ip, payload) {
+export function addZoneSlave(ip: string, payload: string) {
     return request('POST', ip, '/addZoneSlave', payload);
 }
 
-function removeZoneSlave(ip, payload) {
+export function removeZoneSlave(ip: string, payload: string) {
     return request('POST', ip, '/removeZoneSlave', payload);
-}
-
-
-
-module.exports = {
-    info,
-    nowPlaying,
-    volume,
-    presets,
-    getGroup,
-    getZone,
-    setZone,
-    addZoneSlave,
-    removeZoneSlave,
-    key
 }

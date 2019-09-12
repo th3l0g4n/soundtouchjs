@@ -1,43 +1,40 @@
-const api = require('./api');
+import * as api from './api';
+import Device from './Device';
 
-class DeviceZone {
+export default class DeviceZone {
+    master: Device;
+    children: Set<Device>;
 
-    constructor(master, children = []) {
+    constructor(master: Device, children: Device[] = []) {
         this.children = new Set();
         this.master = master;
         children.forEach(c => this.children.add(c));
     }
 
-    async create(children = []) {
-        if (!children.length === 0 && this.children.size === 0) {
+    async create(children: Device[] = []) {
+        if (children.length === 0 && this.children.size === 0) {
             throw new Error('no children for group');
         }
 
         children.forEach(c => this.children.add(c));
 
         await api.setZone(this.master.address, this.buildPayload(this.master, Array.from(this.children)));
-        this.master.inZone = true;
-        this.master.isMaster = true;
-        this.children.forEach(c => c.inZone = true);
     }
 
-    async add(device) {
+    async add(device: Device) {
         if (this.children.has(device)) return;
 
         await api.addZoneSlave(this.master.address, this.buildPayload(this.master, [device]));
-        device.inZone = true;
     }
 
-    async remove(device) {
+    async remove(device: Device) {
         if (!this.children.has(device)) return;
 
         await api.removeZoneSlave(this.master.address, this.buildPayload(this.master, [device]));
-
-        device.inZone = false;
         this.children.delete(device);
     }
 
-    buildPayload(master, members) {
+    buildPayload(master: Device, members: Device[]) {
         return `
             <zone master="${master.macAddress}">
                 ${members.map(child => {
@@ -47,5 +44,3 @@ class DeviceZone {
         `;
     }
 }
-
-module.exports = DeviceZone;
