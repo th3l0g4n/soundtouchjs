@@ -1,0 +1,16 @@
+{
+  "name": "soundtouchjs",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "th3l0g4n",
+  "license": "ISC",
+  "dependencies": {
+    "node-ssdp": "^4.0.0",
+    "ws": "^7.1.2",
+    "xml-js": "^1.6.11"
+  }
+}
