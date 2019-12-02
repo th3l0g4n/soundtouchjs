@@ -18,7 +18,7 @@ function request(method: string, host: string, path: string, data?: string): Pro
             res.on('end', () => resolve(JSON.parse(convert.xml2json(data, { compact: true }))));
         });
 
-        req.on('error', err => reject(err));
+        req.on('error', reject);
         data && req.write(data);
         
         req.end();
